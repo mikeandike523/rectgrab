@@ -1,6 +1,13 @@
 import tkinter as tk
-from PIL import ImageGrab
+from tkinter import filedialog
+from PIL import ImageGrab, PngImagePlugin
 import Quartz
+import os
+import json
+
+# Cache last used directory and file
+last_used_directory = None
+last_used_filename = "screenshot.png"
 
 def get_work_area_size():
     screen = Quartz.CGDisplayBounds(Quartz.CGMainDisplayID())
@@ -61,21 +68,47 @@ class ScreenshotApp:
         x2 = max(self.start_x, end_x)
         y2 = max(self.start_y, end_y)
 
-        print(x1, y1, x2, y2)
+        # Prepare metadata in JSON format
+        metadata = {
+            "startX": x1,
+            "startY": y1,
+            "width": x2 - x1,
+            "height": y2 - y1,
+        }
 
-        screenshot = ImageGrab.grab(bbox=(x1, y1, x2, y2))
-        screenshot.save("screenshot.png")  # Save screenshot to file
-        print(
-            f"Screenshot saved: Coordinates ({x1}, {y1}), Width: {x2-x1}, Height: {y2-y1}"
+        # Open file dialog for saving with last used directory
+        global last_used_directory, last_used_filename
+
+        file_path = filedialog.asksaveasfilename(
+            initialdir=last_used_directory if last_used_directory else os.getcwd(),
+            initialfile=last_used_filename,
+            defaultextension=".png",
+            filetypes=[("PNG files", "*.png"), ("All files", "*.*")]
         )
+
+        if file_path:
+            # Update the last used directory and filename
+            last_used_directory = os.path.dirname(file_path)
+            last_used_filename = os.path.basename(file_path)
+
+            screenshot = ImageGrab.grab(bbox=(x1, y1, x2, y2))
+
+            # Convert screenshot to PNGImagePlugin object to modify EXIF
+            metadata_comment = json.dumps(metadata)
+            png_info = PngImagePlugin.PngInfo()
+            png_info.add_text("Comment", metadata_comment)
+
+            # Save the image with metadata (EXIF comment)
+            screenshot.save(file_path, "PNG", pnginfo=png_info)
+
+            print(
+                f"Screenshot saved: {file_path} - Coordinates ({x1}, {y1}), Width: {x2-x1}, Height: {y2-y1}, EXIF data added: {metadata_comment}"
+            )
 
         self.root.quit()
 
 
-def open_overlay():
-    root = tk.Tk()
-    app = ScreenshotApp(root)
-    root.mainloop()
+root = tk.Tk()
+app = ScreenshotApp(root)
+root.mainloop()
 
-
-open_overlay()

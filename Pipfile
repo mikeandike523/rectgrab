@@ -9,6 +9,7 @@ pillow = "*"
 pyobjc-framework-quartz = "*"
 pyautogui = "*"
 pyobjc = "*"
+global-hotkeys = "*"
 quickmachotkey = "*"
 
 [dev-packages]

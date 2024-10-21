@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "7972f077d6389955c06a0664dcdbced6567d19c7aedbb70677ff2ea85ebffbfa"
+            "sha256": "0485de541af4fe54b49b96be7be9360d01ff4b8da21e60df3d3f33f78caf7443"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -16,6 +16,13 @@
         ]
     },
     "default": {
+        "global-hotkeys": {
+            "hashes": [
+                "sha256:d055f4012c2dac8fa6affbfc85f356a2857e3f44173f8cca4392b543fcf8da9e"
+            ],
+            "index": "pypi",
+            "version": "==0.0.4"
+        },
         "mouseinfo": {
             "hashes": [
                 "sha256:2c62fb8885062b8e520a3cce0a297c657adcc08c60952eb05bc8256ef6f7f6e7"
@@ -226,7 +233,7 @@
                 "sha256:d886ba1f65df47b77ff7546f3fc9bc7d08cfb6b3c04433b719f6b0689a2c0d1f",
                 "sha256:f27cb64aa4d129ce671fd42638c985eb2a56d544214a95fe3214a007eacc4790"
             ],
-            "markers": "python_version >= '3.8'",
+            "markers": "sys_platform == 'darwin'",
             "version": "==10.3.1"
         },
         "pyobjc-framework-apptrackingtransparency": {
